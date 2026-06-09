@@ -137,13 +137,14 @@ h3.title {
 }
 
 .publication-title .brand {
-    font-size: 1.34em;
+    font-size: 1.6em;
     letter-spacing: 0.005em;
-    background: linear-gradient(180deg, #ffffff 0%, #e3f5ff 50%, #9fd8ff 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
+    color: #6cb6ff;
+    -webkit-text-fill-color: #6cb6ff;
+    background: none;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    text-shadow: none;
     filter: drop-shadow(0 0 12px rgba(130, 205, 255, 0.9));
     animation: brandGlow 3s ease-in-out infinite;
 }
