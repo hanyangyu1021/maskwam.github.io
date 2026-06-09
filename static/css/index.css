@@ -133,6 +133,13 @@ h3.title {
 
 .publication-title {
     line-height: 1.08;
+    text-wrap: balance;
+}
+
+.publication-title .brand {
+    color: #6cb6ff;
+    font-size: 1.12em;
+    letter-spacing: -0.02em;
 }
 
 .title.is-3 {
