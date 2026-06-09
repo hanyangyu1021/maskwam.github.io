@@ -139,21 +139,21 @@ h3.title {
 .publication-title .brand {
     font-size: 1.34em;
     letter-spacing: 0.005em;
-    background: linear-gradient(180deg, #ffffff 0%, #9bdcff 45%, #3d9bff 100%);
+    background: linear-gradient(180deg, #ffffff 0%, #e3f5ff 50%, #9fd8ff 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
-    filter: drop-shadow(0 0 9px rgba(90, 180, 255, 0.7)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45));
+    filter: drop-shadow(0 0 12px rgba(130, 205, 255, 0.9));
     animation: brandGlow 3s ease-in-out infinite;
 }
 
 @keyframes brandGlow {
     0%, 100% {
-        filter: drop-shadow(0 0 8px rgba(90, 180, 255, 0.55)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45));
+        filter: drop-shadow(0 0 10px rgba(130, 205, 255, 0.7));
     }
     50% {
-        filter: drop-shadow(0 0 18px rgba(120, 205, 255, 0.95)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45));
+        filter: drop-shadow(0 0 22px rgba(165, 220, 255, 1));
     }
 }
 
