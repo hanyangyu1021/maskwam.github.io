@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="MaskWAM: Unifying Mask Prompting and Prediction for World-Action Models">
+  <meta name="keywords" content="World-Action Models, Mask Visual Prompting, Object-Centric Manipulation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MaskWAM: Unifying Mask Prompting and Prediction for World-Action Models</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css?v=18">
+  <link rel="icon" href="./static/images/image_2.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://hanyangyu1021.github.io/">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <a class="navbar-item" href="#abstract">Overview</a>
+      <a class="navbar-item" href="#method">Method</a>
+      <a class="navbar-item" href="#language-clear">Language-Clear</a>
+      <a class="navbar-item" href="#language-ambiguous">Language-Ambiguous</a>
+      <a class="navbar-item" href="#visualization">Visualization</a>
+      <a class="navbar-item" href="#BibTeX">Citation</a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://hanyangyu1021.github.io/lm-gaussian.github.io/">
+            LM-Gaussian
+          </a>
+          <a class="navbar-item" href="https://hetolin.github.io/PoseVLA/">
+            Pose-VLA
+          </a>
+          <a class="navbar-item" href="https://hanyangyu1021.github.io/maskwam.github.io/">
+            MaskWAM
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+<section class="hero publication-hero">
+  <video class="hero-bg-video" autoplay muted loop playsinline preload="metadata">
+    <source src="./static/videos/bg.mp4" type="video/mp4">
+  </video>
+  <div class="hero-bg-overlay"></div>
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">MaskWAM:<br>Unifying Mask Prompting and Prediction for World-Action Models</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://hanyangyu1021.github.io/">Hanyang Yu</a><sup>1,&Dagger;</sup>,</span>
+            <span class="author-block">
+              <a href="https://hetolin.github.io/">Haitao Lin</a><sup>2,&dagger;</sup>,</span>
+            <span class="author-block">
+              <a href="https://eckertzhang.github.io/">Jingbo Zhang</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://zhangwenyao1.github.io/">Wenyao Zhang</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://chenghaogu.github.io/">Chenghao Gu</a><sup>3,&Dagger;</sup>,</span>
+            <span class="author-block">
+              <a href="https://hengli.me/">Heng Li</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://ece.hkust.edu.hk/pingtan">Ping Tan</a><sup>1,&dagger;</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>The Hong Kong University of Science and Technology</span><br>
+            <span class="author-block"><sup>2</sup>Tencent Robotics X</span>
+            <span class="author-block"><sup>3</sup>Tsinghua University</span>
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="author-block"><sup>&Dagger;</sup>Work done during an internship at Tencent Robotics X</span>
+            <span class="author-block"><sup>&dagger;</sup>Corresponding author</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2409.03456"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2409.03456"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Model Link. -->
+              <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-database"></i>
+                  </span>
+                  <span>Model</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/hanyangyu1021/maskwam"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Video Presentation</h2>
+        <div class="publication-video" style="margin-top: 2rem; margin-bottom: 2rem;">
+          <iframe
+            src="https://www.youtube.com/embed/x0tY7byEaF4"
+            title="MaskWAM video presentation"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3" id="abstract">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            World Action Models (WAMs) present a promising paradigm for robotic control via video prediction. However, current WAMs suffer from fundamental spatial bottlenecks: standard text inputs introduce referential ambiguity in cluttered scenes, while unstructured RGB predictions lack semantic grounding and remain biased by task-irrelevant backgrounds. 
+          </p>
+          <p>
+            To overcome these limitations, we introduce <strong>MaskWAM</strong>, an object-centric world-action model. By jointly integrating masks as both explicit inputs and predictions via a unified Mixture of Transformers (MoT), MaskWAM unlocks robust policy generalization. This design provides two key benefits: (1) predicting future masks yields object-centric semantic supervision that suppresses visual noise, significantly enhancing even standard text-conditioned WAMs; and (2) coupling this predictive supervision with first-frame visual prompts, such as target object masks, establishes a precise spatial anchor that substantially reduces language ambiguity.
+          </p>
+          <p>
+            Crucially, as WAMs are inherently vision-driven architectures, direct mask conditioning yields substantially stronger guidance than text alone, establishing a precise and robust paradigm for manipulating unseen objects. Evaluations on LIBERO, RoboTwin, and real-world tasks demonstrate that MaskWAM significantly outperforms baselines in both language-clear and language-ambiguous tasks.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Teaser figure. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <img src="./static/images/teaser.png" alt="MaskWAM teaser">
+      </div>
+    </div>
+    <!--/ Teaser figure. -->
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Concurrent Work. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3" id="method">Method Overview</h2>
+        <div class="content has-text-justified">
+          <img src="./static/images/overall.png" alt="MaskWAM method overview" style="width: 100%; height: auto;">
+          <p><strong>MaskWAM architecture.</strong> <em>(a) Training:</em> Noisy RGB and mask latents are channel-concatenated and denoised by a unified DiT. The model jointly optimizes future RGB, future masks, and action chunking under a joint flow-matching framework with decoupled noise schedules &tau;<sub>v</sub> and &tau;<sub>a</sub>.
+            <em>(b) Attention mask:</em> A block-wise causal attention mask enables unified RGB, mask, and action training.
+            <em>(c) Inference:</em> Conditioned on optional first-frame masks to resolve spatial ambiguities, the model leverages KV-caching to efficiently generate actions from partially denoised latents.</p>
+
+        </div>
+      </div>
+    </div>
+    <!--/ Concurrent Work. -->
+
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <h2 class="title is-3 has-text-centered">Experiments</h2>
+
+    <!-- Language-Clear Tasks -->
+    <h3 class="title is-4 has-text-centered exp-block" id="language-clear" style="margin-top: 1.5rem;">Language-Clear Tasks</h3>
+    <h4 class="subtitle is-5 has-text-centered video-subhead">Real-Robot Demos</h4>
+    <p class="scroll-hint has-text-centered">Click a video to play. Use the arrows to see more demos.</p>
+    <div class="video-scroll-wrap">
+      <button class="scroll-btn scroll-left" onclick="scrollRow(this,-1)" aria-label="Scroll left">&#10094;</button>
+      <div class="video-scroll">
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task1.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task2.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task3.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task4.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+      </div>
+      <button class="scroll-btn scroll-right" onclick="scrollRow(this,1)" aria-label="Scroll right">&#10095;</button>
+    </div>
+
+    <h4 class="subtitle is-5 has-text-centered video-subhead" style="margin-top: 2rem;">Real-Robot Success Rates</h4>
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <div class="result-table-wrap">
+          <table class="result-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Type</th>
+                <th>Task 1</th>
+                <th>Task 2</th>
+                <th>Task 3</th>
+                <th>Task 4</th>
+                <th>Avg</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="method">&pi;<sub>0</sub></td>
+                <td>VLA</td>
+                <td>57</td><td>54</td><td>54</td><td>58</td><td>55.8</td>
+              </tr>
+              <tr>
+                <td class="method">&pi;<sub>0.5</sub></td>
+                <td>VLA</td>
+                <td>83</td><td>55</td><td>74</td><td>77</td><td>72.3</td>
+              </tr>
+              <tr>
+                <td class="method">FastWAM</td>
+                <td>WAM</td>
+                <td class="cell-second">88</td><td>76</td><td class="cell-second">77</td><td>75</td><td>79.0</td>
+              </tr>
+              <tr class="row-divider">
+                <td class="method">Ours (RGB-only)</td>
+                <td>WAM</td>
+                <td>86</td><td class="cell-second">77</td><td>76</td><td class="cell-second">78</td><td class="cell-second">79.3</td>
+              </tr>
+              <tr>
+                <td class="method">Ours</td>
+                <td>WAM</td>
+                <td class="cell-best">91</td><td class="cell-best">82</td><td class="cell-best">81</td><td class="cell-best">83</td><td class="cell-best">84.3</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-caption">
+          <strong>Real-robot evaluation on language-clear tasks.</strong>
+          Success rates are reported in %. We collect an average of 100 demonstrations per task, and each model is
+          evaluated over 100 trials per task with diverse object placements.
+        </p>
+      </div>
+    </div>
+
+    <h4 class="subtitle is-5 has-text-centered video-subhead" style="margin-top: 2.5rem;">Simulation Benchmarks</h4>
+
+    <div class="sim-card" style="margin-bottom: 1.5rem;">
+      <h5 class="subtitle is-6 has-text-centered video-subhead" style="margin-bottom: 0.5rem;">LIBERO Benchmark</h5>
+      <div class="result-table-wrap">
+        <table class="result-table">
+          <thead>
+            <tr><th>Method</th><th>Type</th><th>Spatial</th><th>Object</th><th>Goal</th><th>Long</th><th>Avg</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="method">WorldVLA</td><td>VLA</td><td>87.6</td><td>96.2</td><td>83.4</td><td>60.0</td><td>81.8</td></tr>
+            <tr><td class="method">GR00T-N1</td><td>VLA</td><td>94.4</td><td>97.6</td><td>93.0</td><td>90.6</td><td>93.9</td></tr>
+            <tr><td class="method">&pi;<sub>0</sub></td><td>VLA</td><td>96.8</td><td>98.8</td><td>95.8</td><td>85.2</td><td>94.1</td></tr>
+            <tr><td class="method">&pi;<sub>0.5</sub></td><td>VLA</td><td class="cell-second">98.6</td><td>98.2</td><td class="cell-second">98.0</td><td>92.4</td><td>96.8</td></tr>
+            <tr><td class="method">Motus</td><td>WAM</td><td>96.8</td><td class="cell-second">99.8</td><td>96.6</td><td class="cell-best">97.6</td><td class="cell-second">97.7</td></tr>
+            <tr><td class="method">FastWAM</td><td>WAM</td><td>98.2</td><td class="cell-best">100.0</td><td>97.0</td><td>95.2</td><td>97.6</td></tr>
+            <tr class="row-divider"><td class="method">Ours (RGB-only)</td><td>WAM</td><td>96.8</td><td>99.6</td><td>97.0</td><td>95.8</td><td>97.3</td></tr>
+            <tr><td class="method">Ours (Mask-only)</td><td>WAM</td><td>97.2</td><td class="cell-second">99.8</td><td>97.4</td><td>96.0</td><td>97.6</td></tr>
+            <tr><td class="method">Ours</td><td>WAM</td><td class="cell-best">98.8</td><td class="cell-best">100.0</td><td class="cell-best">98.2</td><td class="cell-second">96.4</td><td class="cell-best">98.4</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-caption">
+        <strong>Performance on LIBERO.</strong> MaskWAM sets a new state-of-the-art at 98.4% average, surpassing recent
+        VLAs (&pi;<sub>0.5</sub>) and WAMs (Motus, FastWAM). The auxiliary mask-prediction objective lifts our RGB-only
+        variant from 97.3% to 98.4%, improving the base policy even without visual prompts at deployment. Attention maps
+        show the RGB-only model attends to spurious backgrounds, while mask supervision focuses MaskWAM on task-relevant regions.
+      </p>
+    </div>
+
+    <div class="sim-card">
+      <h5 class="subtitle is-6 has-text-centered video-subhead" style="margin-bottom: 0.5rem;">RoboTwin 2.0 Benchmark</h5>
+      <div class="result-table-wrap">
+        <table class="result-table">
+          <thead>
+            <tr><th>Method</th><th>Hammer</th><th>Bell</th><th>Card</th><th>Burger</th><th>Stand</th><th>Shoe</th><th>Avg</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="method">&pi;<sub>0</sub></td><td>68</td><td>72</td><td>81</td><td>79</td><td>63</td><td>74</td><td>72.8</td></tr>
+            <tr><td class="method">FastWAM</td><td>83</td><td>87</td><td>92</td><td class="cell-second">94</td><td>80</td><td>90</td><td>87.7</td></tr>
+            <tr class="row-divider"><td class="method">Ours (RGB-only)</td><td>82</td><td>87</td><td>91</td><td>93</td><td>79</td><td class="cell-second">92</td><td>87.3</td></tr>
+            <tr><td class="method">Ours (Mask-only)</td><td class="cell-second">85</td><td class="cell-second">90</td><td class="cell-second">93</td><td>93</td><td class="cell-second">81</td><td>91</td><td class="cell-second">88.8</td></tr>
+            <tr><td class="method">Ours</td><td class="cell-best">88</td><td class="cell-best">93</td><td class="cell-best">95</td><td class="cell-best">97</td><td class="cell-best">85</td><td class="cell-best">95</td><td class="cell-best">92.2</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-caption">
+        <strong>Performance on RoboTwin 2.0.</strong> MaskWAM reaches a state-of-the-art 92.2% average across six
+        randomized tasks, beating &pi;<sub>0</sub> and FastWAM by 19.4% and 4.5%. The Mask-only variant (88.8%) already
+        outperforms RGB-only (87.3%), and unifying both modalities maximizes performance (92.2%), confirming that
+        auxiliary mask futures focus the model on task-relevant regions.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Language-Ambiguous Tasks -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h3 class="title is-4 has-text-centered exp-block" id="language-ambiguous">Language-Ambiguous Tasks</h3>
+    <p class="scroll-hint has-text-centered">Click a video to play. Use the arrows to see more demos.</p>
+
+    <h3 class="subtitle is-5 has-text-centered video-subhead">In-Distribution</h3>
+    <div class="video-scroll-wrap">
+      <button class="scroll-btn scroll-left" onclick="scrollRow(this,-1)" aria-label="Scroll left">&#10094;</button>
+      <div class="video-scroll">
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task5_0.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task6_0.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task7_0.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task8_0.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+      </div>
+      <button class="scroll-btn scroll-right" onclick="scrollRow(this,1)" aria-label="Scroll right">&#10095;</button>
+    </div>
+
+    <h3 class="subtitle is-5 has-text-centered video-subhead">Distractors</h3>
+    <div class="video-scroll-wrap">
+      <button class="scroll-btn scroll-left" onclick="scrollRow(this,-1)" aria-label="Scroll left">&#10094;</button>
+      <div class="video-scroll">
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task5_1.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task6_1.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task7_1.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task8_1.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+      </div>
+      <button class="scroll-btn scroll-right" onclick="scrollRow(this,1)" aria-label="Scroll right">&#10095;</button>
+    </div>
+
+    <h3 class="subtitle is-5 has-text-centered video-subhead">Novel Instances</h3>
+    <div class="video-scroll-wrap">
+      <button class="scroll-btn scroll-left" onclick="scrollRow(this,-1)" aria-label="Scroll left">&#10094;</button>
+      <div class="video-scroll">
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task5_2.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task6_2.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task7_2.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task8_2.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+      </div>
+      <button class="scroll-btn scroll-right" onclick="scrollRow(this,1)" aria-label="Scroll right">&#10095;</button>
+    </div>
+
+    <h3 class="subtitle is-5 has-text-centered video-subhead">Lighting</h3>
+    <div class="video-scroll-wrap">
+      <button class="scroll-btn scroll-left" onclick="scrollRow(this,-1)" aria-label="Scroll left">&#10094;</button>
+      <div class="video-scroll">
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task5_3.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task6_3.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task7_3.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+        <div class="video-card" onclick="toggleTaskVideo(this)">
+          <video src="./static/videos/task8_3.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+        </div>
+      </div>
+      <button class="scroll-btn scroll-right" onclick="scrollRow(this,1)" aria-label="Scroll right">&#10095;</button>
+    </div>
+
+    <h3 class="subtitle is-5 has-text-centered video-subhead" style="margin-top: 2.5rem;">Quantitative Results</h3>
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <img src="./static/images/shadow_bar_chart.png" alt="Performance on language-ambiguous tasks" style="width: 100%; height: auto;">
+        <p class="has-text-justified" style="margin-top: 1rem;">
+          <strong>Performance on Language-Ambiguous Tasks.</strong>
+          We test how explicit spatial prompting resolves target uncertainty across four settings: one in-distribution and three zero-shot axes.
+          <em>(1)&nbsp;In-Distribution:</em> MaskWAM reaches a 92.9% success rate; masks outperform textual coordinates, confirming that spatial cues are better delivered visually than via text.
+          <em>(2)&nbsp;Distractors:</em> With unseen clutter, MaskWAM holds 90.4% (vs. 52.9% for &pi;<sub>0</sub>-<code>mask</code>).
+          <em>(3)&nbsp;Novel Instances:</em> On unseen target objects (e.g., a novel cup for a trained bowl), MaskWAM reaches 74.6% (vs. 44.6%), showing category-level skill transfer.
+          <em>(4)&nbsp;Lighting:</em> Under illumination shifts, it stays robust at 81.7%.
+          Across all settings, mask prediction consistently beats both visual-prompt VLA and textual-coordinate baselines.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  function toggleTaskVideo(card) {
+    var video = card.querySelector('video');
+    if (!video) return;
+    if (video.paused) {
+      card.classList.add('playing');
+      video.play();
+    } else {
+      video.pause();
+      card.classList.remove('playing');
+    }
+  }
+
+  function scrollRow(btn, dir) {
+    var wrap = btn.closest('.video-scroll-wrap');
+    if (!wrap) return;
+    var scroller = wrap.querySelector('.video-scroll');
+    if (!scroller) return;
+    var maxScroll = scroller.scrollWidth - scroller.clientWidth;
+    var tol = 5;
+    if (dir > 0 && scroller.scrollLeft >= maxScroll - tol) {
+      scroller.scrollTo({ left: 0, behavior: 'smooth' });
+    } else if (dir < 0 && scroller.scrollLeft <= tol) {
+      scroller.scrollTo({ left: maxScroll, behavior: 'smooth' });
+    } else {
+      scroller.scrollBy({ left: dir * scroller.clientWidth * 0.8, behavior: 'smooth' });
+    }
+  }
+</script>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3" id="visualization">Visualization</h2>
+        <img src="./static/images/mask_more.png" alt="Visualization of predicted RGB frames, masks, and attention masks" style="width: 100%; height: auto;">
+        <p class="has-text-justified" style="margin-top: 1rem;">
+          <strong>Visualization of predicted RGB frames, masks, and attention masks in real data.</strong>
+          For visualization only, we decode full future RGB and mask sequences offline; during real-world deployment,
+          MaskWAM uses partial denoising and does not generate full future sequences at test time.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <p>If you find MaskWAM useful in your research, please cite:</p>
+    <pre><code>@article{yu2026maskwam,
+  author    = {Hanyang Yu, Haitao Lin, Jingbo Zhang, Wenyao Zhang, Chenghao Gu, Heng Li, Ping Tan},
+  title     = {MaskWAM: Unifying Mask Prompting and Prediction for World-Action Models},
+  journal   = {},
+  year      = {2026},
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/videos/nerfies_paper.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This means you are free to borrow the <a
+              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
+            we just ask that you link back to this page in the footer.
+            Please remember to remove the analytics code included in the header of the website which
+            you do not want on your website.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
