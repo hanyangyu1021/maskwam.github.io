@@ -335,6 +335,25 @@ h3.title {
     padding-left: 4px;
 }
 
+.highlight-video-card {
+    background: #fff;
+    border: 1px solid #e6e9f0;
+    border-radius: 12px;
+    box-shadow: 0 6px 22px rgba(31, 71, 136, 0.1);
+    padding: 1.25rem;
+}
+
+.video-card.highlight-video {
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
+    aspect-ratio: 16 / 9;
+}
+
+.video-card.highlight-video video {
+    object-fit: cover;
+}
+
 @media screen and (max-width: 768px) {
     .video-card {
         width: 80vw;

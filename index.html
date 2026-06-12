@@ -31,7 +31,7 @@
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css?v=28">
+  <link rel="stylesheet" href="./static/css/index.css?v=29">
   <link rel="icon" href="./static/images/image_2.png">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -508,6 +508,22 @@
           <em>(4)&nbsp;Lighting:</em> Under illumination shifts, it stays robust at 81.7%.
           Across all settings, mask prediction consistently beats both visual-prompt VLA and textual-coordinate baselines.
         </p>
+      </div>
+    </div>
+
+    <h3 class="subtitle is-5 has-text-centered video-subhead" style="margin-top: 2.5rem;">Long-Horizon High-Precision Task</h3>
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <div class="highlight-video-card">
+          <div class="video-card highlight-video" onclick="toggleTaskVideo(this)">
+            <video src="./static/videos/pink.mp4" muted loop playsinline preload="metadata"></video>
+            <div class="video-dim"><span class="play-btn">&#9658;</span></div>
+          </div>
+          <p class="has-text-centered" style="margin-top: 1rem;">
+            <strong>Long-horizon, high-precision task.</strong>
+            MaskWAM successfully completes all 8 targets.
+          </p>
+        </div>
       </div>
     </div>
 
